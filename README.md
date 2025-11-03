@@ -183,6 +183,4 @@ proyecto_final/
 - Los logs se almacenan tanto en base de datos como en archivos JSON
 - El middleware registra automáticamente todas las requests HTTP
 
-## 🆘 Soporte
 
-Para soporte técnico o preguntas, por favor contacta al equipo de desarrollo.
