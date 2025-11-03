@@ -4,7 +4,7 @@ from django.views.decorators.http import require_POST
 import json
 import os
 
-from .models import Payment
+from .models import Payment, AuditLog
 from .services.mercadopago_service import create_payment_preference
 from .utils.audit import log_event   # 👈 Importa la función de auditoría
 
@@ -68,6 +68,21 @@ def list_payments(request):
             "date": p.created_at.strftime("%Y-%m-%d %H:%M:%S")
         }
         for p in payments
+    ]
+    return JsonResponse(data, safe=False)
+
+# Nuevo endpoint para listar logs de auditoría
+def list_logs(request):
+    logs = AuditLog.objects.all().order_by('-timestamp')[:10]  # Últimos 10 logs
+    data = [
+        {
+            "id": log.id,
+            "event": log.event,
+            "user_id": log.user_id,
+            "details": log.details,
+            "timestamp": log.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+        }
+        for log in logs
     ]
     return JsonResponse(data, safe=False)
 
