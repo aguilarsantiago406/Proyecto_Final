@@ -1,4 +1,4 @@
-# Proyecto Final - Integración MercadoPago y GoHighLevel
+# MVP- Integración MercadoPago y GoHighLevel
 
 Este proyecto es una aplicación Django que integra pagos con MercadoPago y sincronización con GoHighLevel (GHL) para gestión de citas y contactos.
 
