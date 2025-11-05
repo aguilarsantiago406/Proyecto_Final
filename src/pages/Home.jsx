@@ -6,6 +6,21 @@ const Home = () => {
   return (
     <div className="hero-root" data-testid="home-page">
       <CosmosParticles />
+      
+      {/* Header simple para acceso rápido admin */}
+      <header style={{
+        position: 'absolute',
+        top: 0, left: 0, right: 0,
+        padding: '1.5rem',
+        display: 'flex',
+        justifyContent: 'flex-end',
+        zIndex: 10
+      }}>
+        <Link to="/admin/login" className="btn btn-ghost" style={{ color: 'white', opacity: 0.8 }}>
+          Soy Administrador →
+        </Link>
+      </header>
+
       <main className="hero-content">
         <div className="hero-area">
           <div className="hero-inner">
@@ -16,20 +31,28 @@ const Home = () => {
               para GoHighLevel
             </h1>
             <p className="hero-sub">
-              Transforma tu flujo de trabajo de pagos con nuestra integración
-              completa. Conecta, procesa y reconcilia pagos automáticamente.
+              Transforma tu flujo de trabajo de pagos. Tus clientes pagan fácil, 
+              tú concilias automáticamente.
             </p>
 
-            <div className="hero-ctas">
+            <div className="hero-ctas" style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              {/* Botón Principal: Para el Cliente */}
+              <Link
+                to="/portal"
+                className="btn btn-lg btn-primary hero-cta"
+                style={{ minWidth: '200px' }}
+              >
+                Ir a Pagar
+              </Link>
+
+              {/* Botón Secundario: Información/Admin */}
               <Link
                 to="/admin/login"
-                className="btn btn-lg btn-primary hero-cta"
+                className="btn btn-lg btn-outline hero-cta"
+                style={{ minWidth: '200px', borderColor: 'rgba(255,255,255,0.3)', color: 'white' }}
               >
-                Comenzar Ahora
+                Instalar App
               </Link>
-              <a href="#docs" className="btn btn-lg btn-outline hero-cta">
-                Ver documentación
-              </a>
             </div>
           </div>
         </div>
@@ -39,92 +62,43 @@ const Home = () => {
             <article className="feature-card">
               <div className="feature-icon">⚡</div>
               <h3>Integración Automática</h3>
-              <p>
-                Conecta GoHighLevel y Mercado Pago en minutos con OAuth 2.0
-                seguro.
-              </p>
+              <p>Conecta GoHighLevel y Mercado Pago y realiza tu pago de manera segura.</p>
             </article>
-
             <article className="feature-card">
               <div className="feature-icon">🔒</div>
               <h3>Pagos Seguros</h3>
-              <p>
-                Procesa pagos con la seguridad y cumplimiento que tu negocio
-                necesita.
-              </p>
+              <p>Procesa pagos con la seguridad y cumplimiento que tu negocio necesita.</p>
             </article>
-
             <article className="feature-card">
               <div className="feature-icon">📈</div>
               <h3>Reconciliación Diaria</h3>
-              <p>
-                Reportes automáticos y conciliación financiera sin intervención
-                manual.
-              </p>
+              <p>Reportes automáticos y conciliación financiera sin intervención manual.</p>
             </article>
-
             <article className="feature-card">
               <div className="feature-icon">🌐</div>
               <h3>Multicliente</h3>
-              <p>
-                Gestiona múltiples subcuentas desde un único panel
-                administrativo.
-              </p>
+              <p>Gestiona múltiples subcuentas desde un único panel administrativo.</p>
             </article>
-
             <article className="feature-card">
               <div className="feature-icon">🔁</div>
               <h3>Webhooks en Tiempo Real</h3>
               <p>Actualizaciones instantáneas del estado de pagos en GHL.</p>
             </article>
-
             <article className="feature-card">
               <div className="feature-icon">🛡️</div>
               <h3>Instalación Privada</h3>
-              <p>
-                Apps privadas por invitación, listas para comercializar con tu
-                marca.
-              </p>
+              <p>Apps privadas por invitación, listas para comercializar con tu marca.</p>
             </article>
-          </div>
-        </section>
-
-        <section id="why" className="hero-why">
-          <h2>
-            ¿Por qué <span className="accent">RP Pagos</span> ?
-          </h2>
-          <div className="why-grid">
-            <div className="why-item">
-              Autenticación OAuth segura para GHL y Mercado Pago
-            </div>
-            <div className="why-item">
-              Generación de enlaces de pago desde GHL
-            </div>
-            <div className="why-item">
-              Actualización automática de estado en GHL
-            </div>
-            <div className="why-item">
-              Panel administrativo con métricas en tiempo real
-            </div>
-            <div className="why-item">Exportación de informes en CSV/JSON</div>
-            <div className="why-item">
-              Webhooks automatizados y reglas inteligentes
-            </div>
           </div>
         </section>
 
         <section className="hero-cta-invite">
           <div className="cta-invitation">
-            <h3>
-              Listo para <strong>Despegar</strong>?
-            </h3>
-            <p>
-              Únete a agencias y empresas que ya están automatizando sus pagos
-              con nuestra plataforma de integración profesional.
-            </p>
+            <h3>¿Listo para <strong>Despegar</strong>?</h3>
+            <p>Únete a agencias y empresas que ya están automatizando sus pagos.</p>
             <div className="cta-actions">
               <Link to="/admin/login" className="btn btn-primary">
-                Instalar App Privada
+                Comenzar Ahora
               </Link>
             </div>
           </div>
