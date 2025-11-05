@@ -1,0 +1,1 @@
+"""Serializadores para la app clients (DRF opcional)."""

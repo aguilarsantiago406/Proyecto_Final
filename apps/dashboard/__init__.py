@@ -1,0 +1,1 @@
+"""App dashboard: panel visual multi-cliente."""

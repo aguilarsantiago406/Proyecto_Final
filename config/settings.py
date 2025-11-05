@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-!h^#348u#m(a@rn--h4c@*m$(=hj*s$*h8x+-(h&h)=!bn6e2(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.ngrok-free.dev']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.ngrok-free.dev', '.trycloudflare.com']
 
 
 # Application definition
@@ -43,8 +43,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'payments',         # app de django
+    'apps.payments',         # app de django (migrada a apps/)
     "corsheaders",
+    'apps.clients',     # nueva estructura
+    'apps.dashboard',   # nueva estructura
 ]
 
 MIDDLEWARE = [
@@ -58,7 +60,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     # Middleware personalizado para registrar auditoría
-    "payments.middleware.RequestLogMiddleware",
+    "apps.payments.middleware.RequestLogMiddleware",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True

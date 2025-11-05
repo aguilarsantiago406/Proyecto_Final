@@ -1,0 +1,1 @@
+"""App: gestión de clientes y tokens (GHL + MP)."""

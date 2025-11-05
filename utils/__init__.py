@@ -1,0 +1,1 @@
+"""Utilidades comunes: cifrado, decorators, logging y constantes."""

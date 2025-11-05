@@ -88,6 +88,10 @@ WEBHOOK_URL=https://tu-dominio.ngrok-free.dev/payments/webhooks/mp/
 ### Webhooks
 - `POST /payments/webhooks/mp/` - Webhook de MercadoPago
 
+### OAuth Callbacks
+- `GET /payments/oauth/callback/ghl/` - Callback OAuth de GoHighLevel (App Privada)
+- `GET /payments/oauth/callback/mp/` - Callback OAuth de Mercado Pago (App)
+
 ## 🗄️ Modelos de Datos
 
 ### Payment
@@ -115,6 +119,51 @@ WEBHOOK_URL=https://tu-dominio.ngrok-free.dev/payments/webhooks/mp/
 4. **Actualización Local**: Se actualiza el estado en la base de datos
 5. **Notificación GHL**: Si el pago es aprobado, se notifica a GoHighLevel
 6. **Auditoría**: Todos los eventos se registran en los logs
+
+## 🔐 OAuth y App Privada
+
+### 1) Registrar App Privada en GHL
+- Ir a `https://developers.gohighlevel.com`
+- Crear nueva App Developer → "Private App"
+- Completar:
+  - Name: "RP Pagos GHL – Mercado Pago"
+  - Redirect URL: `https://tuapp.com/oauth/callback/ghl`
+  - Scopes: `contacts.read`, `contacts.write`, `tags.read`, `tags.write`
+- Guardar `Client ID` y `Client Secret` en `.env` como `GHL_CLIENT_ID`, `GHL_CLIENT_SECRET`, con `GHL_REDIRECT_URI`
+
+### 2) Generar link de instalación por invitación
+Ejemplo:
+```
+https://marketplace.gohighlevel.com/oauth/authorize?response_type=code&client_id=<TU_CLIENT_ID>&redirect_uri=https://tuapp.com/oauth/callback/ghl&scope=contacts.read,contacts.write,tags.read,tags.write
+```
+Comparte este link al cliente/subcuenta. Al autorizar, GHL redirige a `/payments/oauth/callback/ghl/` con `code`.
+
+### 3) Implementación OAuth en backend (GHL)
+- Endpoint `/payments/oauth/callback/ghl/` intercambia `code` en `POST https://api.msgsndr.com/oauth/token`.
+- Se guardan `access_token`, `refresh_token` y `location_id` por cliente en el modelo `ClientIntegration`.
+
+### 4) Conexión Mercado Pago (OAuth 2.0)
+- Endpoint `/payments/oauth/callback/mp/` intercambia `code` contra `https://api.mercadopago.com/oauth/token`.
+- Se guardan `access_token`, `refresh_token`, `user_id` del comercio en `ClientIntegration`.
+
+### 5) Panel administrativo (pendiente)
+- /dashboard: ver cliente, total pagos, aprobados, pendientes, última actualización.
+- Opcional: exportar CSV o ver detalles por cita/contacto.
+
+### 6) Webhooks y sincronización
+- `/payments/webhooks/mp/` procesa eventos de pago y, si corresponde, actualiza el contacto en GHL usando el token correcto.
+- Identificar cliente desde `external_reference` o `mp_user_id` (mejora futura).
+
+### 7) Reconciliación
+- Comando diario `python manage.py reconcile`:
+  - Consulta `GET /v1/payments/search` en MP por cliente
+  - Compara con `Payment` locales
+  - Reporta diferencias por cliente
+  - Notifica por consola/log
+
+### 8) Documentación y demo
+- Ver `.env.example` para configuración
+- Agregar capturas de los callbacks y panel (cuando esté listo) y un video corto de flujo.
 
 ## 🧪 Pruebas
 
