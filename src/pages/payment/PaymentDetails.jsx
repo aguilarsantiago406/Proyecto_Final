@@ -1,56 +1,58 @@
+// src/pages/payment/PaymentDetails.jsx
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useApi } from '../../hooks/useApi';
-import paymentService from '../../api/paymentService';
-import PaymentInfo from '../../components/payment/PaymentInfo'; 
-import Button from '../../components/common/button'; 
-import LoadingSpinner from '../../components/common/LoadingSpinner'; 
+import { useParams, useSearchParams } from 'react-router-dom';
+import PaymentInfo from '../../components/payment/PaymentInfo';
+import Button from '../../components/common/Button';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 const PaymentDetails = () => {
   const { id } = useParams();
-  const { data: paymentData, loading, error, execute } = useApi(paymentService.getPaymentDetails);
+  const [searchParams] = useSearchParams();
+  const [loading, setLoading] = useState(true);
+  const [paymentData, setPaymentData] = useState(null);
   const [isRedirecting, setIsRedirecting] = useState(false);
-  
+
   useEffect(() => {
-    if (id) { execute(id); }
-  }, [id, execute]);
+    // Lee TODOS los datos de la URL
+    const data = {
+      contact_name: searchParams.get('client'),
+      amount: searchParams.get('amount'),
+      currency: 'PEN', // Forzamos Soles por ahora
+      description: searchParams.get('desc'),
+      mp_preference_id: searchParams.get('pref_id'),
+      // Usamos la fecha actual si no viene en la URL
+      appointment_date: new Date().toISOString() 
+    };
+
+    // Solo mostramos los datos si tenemos el ID crítico de Mercado Pago
+    if (data.mp_preference_id) {
+      setPaymentData(data);
+    }
+    // Simular carga breve para mejor UX
+    setTimeout(() => setLoading(false), 500);
+  }, [searchParams]);
   
   const handleProceedToPayment = () => {
-    if (!paymentData?.mp_preference_id) {
-      console.error('No se encontró el ID de preferencia de Mercado Pago');
-      return;
-    }
+    if (!paymentData?.mp_preference_id) return;
     setIsRedirecting(true);
-    const mpUrl = `https://www.mercadopago.com/checkout/v1/redirect?pref_id=${paymentData.mp_preference_id}`;
-    setTimeout(() => {
-      console.log('Redirigiendo a:', mpUrl);
-      if (window.showToast) {
-        window.showToast('💳 En producción, serías redirigido a Mercado Pago.', 'info', 5000);
-      }
-      setIsRedirecting(false);
-    }, 1500);
+    // URL de producción de Mercado Pago Perú
+    const mpUrl = `https://www.mercadopago.com.pe/checkout/v1/redirect?pref_id=${paymentData.mp_preference_id}`;
+    window.location.href = mpUrl;
   };
   
   if (loading) {
     return (
       <div className="page-loader">
-        <LoadingSpinner size="lg" message="Cargando detalles del pago..." />
+        <LoadingSpinner size="lg" message="Verificando información del pago..." />
       </div>
     );
   }
   
-  if (error || !paymentData) {
+  if (!paymentData) {
     return (
-      <div className="payment-page-box" style={{textAlign: 'center'}}>
-        <div className="payment-result-icon failure">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </div>
-        <h2 style={{fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-primary)', marginBottom: '0.5rem'}}>Pago no encontrado</h2>
-        <p style={{color: 'var(--text-secondary)'}}>
-          No se pudo encontrar el pago solicitado. Verifica el enlace e intenta nuevamente.
-        </p>
+      <div className="payment-page-box" style={{textAlign: 'center', padding: '4rem 1rem'}}>
+        <h2 style={{fontSize: '1.5rem', color: 'var(--color-error)', marginBottom: '1rem'}}>Enlace Inválido</h2>
+        <p>Este enlace de pago parece estar incompleto. Falta información clave para procesarlo.</p>
       </div>
     );
   }
@@ -58,7 +60,6 @@ const PaymentDetails = () => {
   return (
     <div className="payment-page-box" data-testid="payment-details-page">
       <PaymentInfo paymentData={paymentData} />
-      
       <div className="payment-action-box">
         <Button
           variant="primary"
@@ -66,23 +67,12 @@ const PaymentDetails = () => {
           fullWidth={true}
           onClick={handleProceedToPayment}
           loading={isRedirecting}
-          data-testid="proceed-to-payment-button"
         >
-          {isRedirecting ? 'Redirigiendo...' : 'Proceder al Pago'}
+          {isRedirecting ? 'Conectando con Mercado Pago...' : 'Pagar Ahora'}
         </Button>
-        <p>Serás redirigido a Mercado Pago para completar el pago de forma segura</p>
-      </div>
-      
-      <div className="payment-security-box">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-        </svg>
-        <div>
-          <h4>Pago 100% Seguro</h4>
-          <p>
-            Tu información de pago está protegida. Procesado por Mercado Pago.
-          </p>
-        </div>
+        <p style={{marginTop: '1rem', fontSize: '0.75rem', color: 'var(--text-secondary)'}}>
+          Serás redirigido a la pasarela segura de Mercado Pago.
+        </p>
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import Modal from '../../components/common/Modal'; 
 import { formatCurrency } from '../../utils/formatUtils'; 
 import { formatDate } from '../../utils/dateUtils'; 
-import Button from '../../components/common/button'; 
+import Button from '../../components/common/Button'; 
 
 const PaymentHistory = () => {
   const { data, loading, error, execute } = useApi(adminService.getPayments);

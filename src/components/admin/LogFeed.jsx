@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { formatRelativeDate } from '../../utils/dateUtils';
 import { getLogEventIcon } from '../../utils/statusUtils'; 
-import Button from '../common/button';
+import Button from '../common/Button';
 
 const LogFeed = ({ logs, onExport }) => {
   const [filter, setFilter] = useState('all');

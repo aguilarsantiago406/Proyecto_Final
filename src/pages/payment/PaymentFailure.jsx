@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import Button from '../../components/common/button'; // <-- Ruta relativa
+import Button from '../../components/common/Button'; // <-- Ruta relativa
 import Card from '../../components/common/Card'; // <-- Ruta relativa
 
 const PaymentFailure = () => {

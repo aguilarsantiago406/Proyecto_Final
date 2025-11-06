@@ -1,7 +1,7 @@
 import React from 'react';
-import { useAuth } from '../../hooks/useAuth'; // <-- Ruta relativa
+import { useAuth } from '../../hooks/useAuth'; 
 import { useNavigate } from 'react-router-dom';
-import Button from '../common/button';
+import Button from '../common/Button';
 
 const AdminNavbar = () => {
   const { user, logout } = useAuth();

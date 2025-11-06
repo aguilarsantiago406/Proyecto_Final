@@ -1,6 +1,7 @@
+// src/api/apiClient.js
 import axios from 'axios';
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001'; 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
 
 const apiClient = axios.create({
   baseURL: `${BACKEND_URL}/api`,
@@ -28,6 +29,7 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('admin_token');
+      localStorage.removeItem('admin_user');
       window.location.href = '/admin/login';
     }
     return Promise.reject(error);

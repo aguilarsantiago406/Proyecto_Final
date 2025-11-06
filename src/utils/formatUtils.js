@@ -1,16 +1,16 @@
 export const formatCurrency = (amount, currency = 'PEN') => {
   if (amount === null || amount === undefined) return '-';
   
-  return new Intl.NumberFormat('es-PE', { // <-- CAMBIADO a es-PE
+  return new Intl.NumberFormat('es-PE', {
     style: 'currency',
-    currency: currency, // <-- Usará 'PEN' por defecto
+    currency: currency, 
     minimumFractionDigits: 2,
   }).format(amount);
 };
 
 export const formatNumber = (number) => {
   if (number === null || number === undefined) return '-';
-  return new Intl.NumberFormat('es-PE').format(number); // <-- CAMBIADO a es-PE
+  return new Intl.NumberFormat('es-PE').format(number);
 };
 
 export const formatPercentage = (value, decimals = 1) => {

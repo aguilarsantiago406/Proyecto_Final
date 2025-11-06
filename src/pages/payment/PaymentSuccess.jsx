@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
-import Button from '../../components/common/button'; 
+import Button from '../../components/common/Button'; 
 import Card from '../../components/common/Card';
 
 const PaymentSuccess = () => {

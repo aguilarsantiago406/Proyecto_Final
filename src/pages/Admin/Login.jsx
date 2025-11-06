@@ -1,13 +1,14 @@
+// src/pages/admin/Login.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth'; 
-import Input from '../../components/common/Input'; 
-import Button from '../../components/common/button'; 
-import Card from '../../components/common/Card'; 
-import { isValidEmail, isNotEmpty } from '../../utils/validators'; 
+import { useNavigate, Link } from 'react-router-dom'; // <-- Importamos Link
+import { useAuth } from '../../hooks/useAuth';
+import Input from '../../components/common/Input';
+import Button from '../../components/common/Button';
+import Card from '../../components/common/Card';
+import { isNotEmpty } from '../../utils/validators';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +17,7 @@ const Login = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!isValidEmail(email)) newErrors.email = 'Email inválido';
+    if (!isNotEmpty(username)) newErrors.username = 'El usuario es requerido';
     if (!isNotEmpty(password)) newErrors.password = 'La contraseña es requerida';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -28,14 +29,14 @@ const Login = () => {
     
     setIsLoading(true);
     try {
-      const result = await login(email, password);
+      const result = await login(username, password);
       if (result.success) {
         navigate('/admin');
       } else {
-        setErrors({ general: result.message || 'Error desconocido' });
+        setErrors({ general: result.message || 'Credenciales incorrectas' });
       }
     } catch (error) {
-      setErrors({ general: error.message || 'Error de conexión. Intenta nuevamente.' });
+      setErrors({ general: 'Error de conexión con el servidor.' });
     } finally {
       setIsLoading(false);
     }
@@ -44,11 +45,8 @@ const Login = () => {
   return (
     <div className="login-container" data-testid="login-page">
       <div className="login-box">
-        {/* Logo y título */}
         <div className="login-header">
-          <div className="login-logo">
-            <span>RP</span>
-          </div>
+          <div className="login-logo"><span>RP</span></div>
           <h1>RP Pagos</h1>
           <p>Panel Administrativo</p>
         </div>
@@ -56,13 +54,12 @@ const Login = () => {
         <Card>
           <form onSubmit={handleSubmit} className="login-form">
             <Input
-              label="Email"
-              type="email"
-              placeholder="admin@rppagos.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              error={errors.email}
-              data-testid="login-email-input"
+              label="Usuario" 
+              type="text"
+              placeholder="alice"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              error={errors.username}
             />
             <Input
               label="Contraseña"
@@ -71,29 +68,30 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               error={errors.password}
-              data-testid="login-password-input"
             />
             {errors.general && (
-              <div className="error-message">
-                <p>{errors.general}</p>
-              </div>
+              <div className="error-message"><p>{errors.general}</p></div>
             )}
-            <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              fullWidth={true}
-              loading={isLoading}
-              data-testid="login-submit-button"
-            >
+            <Button type="submit" variant="primary" size="lg" fullWidth={true} loading={isLoading}>
               Iniciar Sesión
             </Button>
           </form>
         </Card>
-        
-        <p className="login-footer">
-          © 2025 RP Pagos. Integración GHL + Mercado Pago
-        </p>
+
+        {/* --- NUEVO: Botón Volver al Inicio --- */}
+        <div className="login-footer" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+           <Link 
+            to="/" 
+            style={{ 
+              color: 'var(--color-primary)', 
+              textDecoration: 'none', 
+              fontWeight: 500
+            }}
+          >
+            ← Volver a la Página Principal
+          </Link>
+          <p style={{ margin: 0 }}>© 2025 RP Pagos. Integración GHL + Mercado Pago</p>
+        </div>
       </div>
     </div>
   );

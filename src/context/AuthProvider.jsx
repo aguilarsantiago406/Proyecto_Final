@@ -1,6 +1,7 @@
+// src/context/AuthProvider.jsx
 import React, { useState, useEffect } from 'react';
-import adminService from '../api/adminService'; // <-- Ruta relativa
-import { AuthContext } from './AuthContext'; // <-- Ruta relativa
+import adminService from '../api/adminService';
+import { AuthContext } from './AuthContext';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -9,52 +10,47 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const storedToken = localStorage.getItem('admin_token');
-    const storedUser = localStorage.getItem('admin_user');
-    
-    if (storedToken && storedUser) {
+    // Podríamos intentar validar el token con /api/auth/me/  aquí si quisiéramos ser más robustos.
+    if (storedToken) {
       setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      // Por ahora asumimos que el usuario sigue logueado si hay token.
     }
     setLoading(false);
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (username, password) => { // <-- Cambiado 'email' por 'username'
     try {
-      const response = await adminService.login(email, password);
-      const { token: newToken, user: userData } = response;
+      const response = await adminService.login(username, password);
+      // Asumimos que la respuesta del backend tiene esta estructura (ajustar si es diferente)
+      // { "access": "...", "refresh": "..." } es común en Django/Python, o tal vez { "token": "..." }
+      const token = response.access || response.token; 
       
-      localStorage.setItem('admin_token', newToken);
-      localStorage.setItem('admin_user', JSON.stringify(userData));
-      
-      setToken(newToken);
-      setUser(userData);
-      
-      return { success: true };
+      if (token) {
+        localStorage.setItem('admin_token', token);
+        setToken(token);
+        // Podríamos llamar a /api/auth/me/  aquí para obtener los datos del usuario
+        setUser({ name: username }); // Guardamos el username temporalmente
+        return { success: true };
+      } else {
+         return { success: false, message: "No se recibió token del servidor" };
+      }
     } catch (error) {
       console.error('Error en login:', error);
-      throw error; // Lanza el error para que Login.jsx lo atrape
+      throw error;
     }
   };
 
   const logout = () => {
     localStorage.removeItem('admin_token');
-    localStorage.removeItem('admin_user');
     setToken(null);
     setUser(null);
   };
 
-  const isAuthenticated = () => {
-    return !!token && !!user;
-  };
+  const isAuthenticated = () => !!token;
 
-  const value = {
-    user,
-    token,
-    loading,
-    login,
-    logout,
-    isAuthenticated,
-  };
+  const value = { user, token, loading, login, logout, isAuthenticated };
+
+  if (loading) return <div>Cargando...</div>;
 
   return (
     <AuthContext.Provider value={value}>

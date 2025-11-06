@@ -955,3 +955,171 @@ body {
 .payment-result-icon.failure { background-color: #fee2e2; }
 .payment-result-icon.failure svg { width: 2.5rem; height: 2.5rem; color: #dc2626; }
 
+/* ================================================================
+   6. ESTILOS ADICIONALES (Home, Portal Cliente, Partículas)
+================================================================
+*/
+
+/* --- Cosmos Particles (Fondo Animado) --- */
+.cosmos-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0; /* Detrás del contenido */
+}
+
+/* --- Página de Inicio (Home) --- */
+.hero-root {
+  position: relative;
+  min-height: 100vh;
+  background-color: #0f172a; /* Fondo oscuro elegante */
+  color: white;
+  overflow-x: hidden;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1; /* Encima de las partículas */
+}
+
+.hero-area {
+  padding: 8rem 1.5rem 6rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-inner {
+  max-width: 48rem;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: rgba(99, 102, 241, 0.1); /* indigo-500 con transparencia */
+  color: #818cf8; /* indigo-400 */
+  border-radius: 99px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(to right, white, #94a3b8); /* Degradado de texto */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+@media (min-width: 768px) {
+  .hero-title { font-size: 4.5rem; }
+}
+
+.hero-sub {
+  font-size: 1.25rem;
+  color: #94a3b8; /* slate-400 */
+  margin-bottom: 3rem;
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-cta {
+  min-width: 200px;
+  font-weight: 600;
+}
+
+/* --- Sección de Características (Features) --- */
+.features-section {
+  padding: 4rem 1.5rem;
+  background-color: #1e293b; /* slate-800 */
+}
+
+.features-grid {
+  max-width: 80rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 2rem;
+}
+@media (min-width: 768px) {
+  .features-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.feature-card {
+  background-color: rgba(30, 41, 59, 0.5); /* slate-800 con transparencia */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 1rem;
+  transition: transform 300ms ease;
+}
+.feature-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--color-primary-light);
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.feature-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 0.75rem;
+}
+
+.feature-card p {
+  color: #94a3b8; /* slate-400 */
+}
+
+/* --- Sección de Invitación Final --- */
+.hero-cta-invite {
+  padding: 6rem 1.5rem;
+  text-align: center;
+  background-color: #0f172a;
+}
+
+.cta-invitation h3 {
+  font-size: 2.25rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+.cta-invitation strong {
+  color: var(--color-primary-light);
+}
+
+.cta-invitation p {
+  font-size: 1.25rem;
+  color: #94a3b8;
+  margin-bottom: 2rem;
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- Ajustes Específicos para el Portal de Cliente --- */
+.client-portal-page .login-container {
+  /* Hereda el degradado azul del login, está bien */
+}
+/* Centrar mejor el formulario en el portal */
+.payment-page-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Ocupa casi toda la altura para centrar verticalmente */
+}

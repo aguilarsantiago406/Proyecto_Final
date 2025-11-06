@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { formatDate } from '../../utils/dateUtils';
 import { formatCurrency } from '../../utils/formatUtils';
 import { getPaymentStatusText } from '../../utils/statusUtils'; 
-import Button from '../common/button';
+import Button from '../common/Button';
 
 const PaymentsTable = ({ payments, onViewDetails }) => {
   const [sortField, setSortField] = useState('date');
